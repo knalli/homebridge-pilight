@@ -1,0 +1,25 @@
+{
+  "name": "homebridge-pilight",
+  "version": "1.0.0",
+  "description": "Homebridge plugin connecting to pilight",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/knalli/homebridge-pilight.git"
+  },
+  "bugs": {
+    "url": "https://github.com/knalli/homebridge-pilight/issues"
+  },
+  "keywords": [
+    "homebridge-plugin",
+    "pilight"
+  ],
+  "engines": {
+    "homebridge": ">=0.2.5",
+    "node": ">=4.2"
+  },
+  "author": "Jan Philipp <knallisworld@googlemail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "websocket": "^1.0.22"
+  }
+}
