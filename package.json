@@ -23,9 +23,11 @@
     "websocket": "^1.0.22"
   },
   "devDependencies": {
-    "conventional-changelog": "^0.5.1"
+    "conventional-changelog": "^0.5.1",
+    "jasmine": "^2.3.2"
   },
   "scripts": {
-    "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -w -r 0"
+    "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -w -r 0",
+    "test": "jasmine"
   }
 }
