@@ -24,10 +24,12 @@
   },
   "devDependencies": {
     "conventional-changelog": "^0.5.1",
+    "eslint": "^1.10.0",
     "jasmine": "^2.3.2"
   },
   "scripts": {
     "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -w -r 0",
-    "test": "jasmine"
+    "test": "jasmine",
+    "prepublish": "eslint **/*.js"
   }
 }
