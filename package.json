@@ -21,5 +21,11 @@
   "license": "MIT",
   "dependencies": {
     "websocket": "^1.0.22"
+  },
+  "devDependencies": {
+    "conventional-changelog": "^0.5.1"
+  },
+  "scripts": {
+    "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -w -r 0"
   }
 }
