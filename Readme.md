@@ -1,5 +1,7 @@
 # Homebridge pilight Plugin
 
+[![Build Status](https://travis-ci.org/knalli/homebridge-pilight.svg)](https://travis-ci.org/knalli/homebridge-pilight)
+
 This is an accessory plugin for [Homebridge](https://github.com/nfarina/homebridge) allowing to manage and control
 pilight devices.
 
