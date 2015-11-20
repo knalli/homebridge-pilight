@@ -28,7 +28,7 @@
     "jasmine": "^2.3.2"
   },
   "scripts": {
-    "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -w -r 0",
+    "changelog": "conventional-changelog -i CHANGELOG.md -w -r 0",
     "test": "jasmine",
     "prepublish": "eslint **/*.js"
   }
