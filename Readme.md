@@ -1,6 +1,6 @@
 # Homebridge pilight Plugin
 
-[![npm version](https://img.shields.io/npm/v/homebridge-pilight.svg)](https://www.npmjs.com/package/homebridge-pilight) [![Build Status](https://travis-ci.org/knalli/homebridge-pilight.svg)](https://travis-ci.org/knalli/homebridge-pilight)
+[![npm version](https://img.shields.io/npm/v/homebridge-pilight.svg)](https://www.npmjs.com/package/homebridge-pilight) [![Build Status](https://travis-ci.org/knalli/homebridge-pilight.svg)](https://travis-ci.org/knalli/homebridge-pilight) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
 This is an accessory plugin for [Homebridge](https://github.com/nfarina/homebridge) allowing to manage and control
 pilight devices.
