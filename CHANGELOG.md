@@ -1,3 +1,13 @@
+<a name="1.0.1"></a>
+## 1.0.1 (2015-11-20)
+
+
+### fix
+
+* fix(package): fix changelog generator settings ([e2b59fb](https://github.com/knalli/homebridge-pilight/commit/e2b59fb))
+
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2015-11-20)
 
@@ -19,6 +29,8 @@
 ### test
 
 * test(utils): add tests ([3687aba](https://github.com/knalli/homebridge-pilight/commit/3687aba))
+
+* Release 1.0.0 ([78e5b7d](https://github.com/knalli/homebridge-pilight/commit/78e5b7d))
 
 
 
