@@ -23,12 +23,12 @@ module.exports = function (homebridge) {
     constructor(log, config) {
       this.log = log;
 
-      this.deviceStates = {};
+      this.deviceState = undefined;
 
       this.config = {
-        host : config.host || 'localhost',
-        port : config.port || 5001,
-        deviceId : config.device || 'lamp'
+        host: config.host || 'localhost',
+        port: config.port || 5001,
+        deviceId: config.device || 'lamp'
       };
 
       this.id = `name=${this.config.deviceId},ws://${this.config.host}:${this.config.port}/`;
@@ -38,27 +38,33 @@ module.exports = function (homebridge) {
 
       // handle connect failure
       this.client.on('connectFailed', (err) => {
-        this.log(`${this.id}: Connection failed: ${err.message}`);
-        this.log(`${this.id}: Connection failed, will retry in 10s...`);
+        this.log(`Websocket connection failed: ${err.message}`);
+        this.log(`Websocket connection failed, will retry in 10s...`);
         setTimeout(() => {
           this.connect();
         }, 10000);
       });
+
+      // handle ws error
+      this.client.on('error', function (err) {
+        this.log(`Websocket connection error: ${err.toString()}`);
+      });
     }
 
     connect() {
-      this.client.connect('ws://' + this.config.host + ':' + this.config.port + '/');
-      this.log(`${this.id}: Connecting...`);
+      const pilightSocketAddress = `ws://${this.config.host}:${this.config.port}/`;
+      this.client.connect(pilightSocketAddress);
+      this.log(`Connecting to "${pilightSocketAddress}"`);
 
       // FIXME: Should cache/multiplex identical connections?
       this.client.on('connect', (connection) => {
-        this.log(`${this.id}: Connection established!`);
+        this.log(`Connection established!`);
         this._connection = connection; // hold reference to current connection
 
         this._connection.on('message', (message) => this.handleMessage(message));
 
         // initial request all available values
-        this._connection.sendUTF(JSON.stringify({action : 'request values'}));
+        this._connection.sendUTF(JSON.stringify({action: 'request values'}));
       });
     }
 
@@ -69,23 +75,25 @@ module.exports = function (homebridge) {
         .then((json) => {
           if (utils.isMessageOfTypeValues(json)) {
             // bulk update ("request values")
-            this.deviceStates = {};
-            for (let item of json) {
-              for (let device of item.devices) {
-                this.deviceStates[device] = item.values.state === 'on';
-              }
-              this.log(`${this.id}: Updated internal states of devices: ${item.devices}`);
+            const item = json.find((item) => {
+              return item.devices.indexOf(this.config.deviceId) !== -1;
+            });
+            if (item) {
+              this.deviceState = item.values.state === 'on';
+              this.log(`Initialized device with state "${item.values.state}"`);
+            } else {
+              this.log(`Could not find device with id "${this.config.deviceId}"`);
             }
           } else if (utils.isMessageOfTypeUpdate(json)) {
             // item update (after "control")
-            for (let device of json.devices) {
-              this.deviceStates[device] = json.values.state === 'on';
+            if (json.devices.indexOf(this.config.deviceId) !== -1) {
+              this.deviceState = json.values.state === 'on';
+              this.log(`Updated internal state to "${json.values.state}"`);
             }
-            this.log(`${this.id}: Updated internal states of devices: ${json.devices}`);
           }
         })
-        .catch(() => {
-          this.log(`${this.id}: Something went wrong, cannot parse message`);
+        .catch((e) => {
+          this.log(`Something went wrong, cannot parse message. Error: ${e}`);
         });
     }
 
@@ -93,20 +101,22 @@ module.exports = function (homebridge) {
       if (!this._connection) {
         callback(new Error('No connection'));
       } else {
+        const state = powerOn ? 'on' : 'off';
+        this.log(`Try to set powerstate to "${state}"`);
         this._connection.sendUTF(JSON.stringify({
-          action : 'control',
-          code : {device : this.config.deviceId, state : (powerOn ? 'on' : 'off')}
+          action: 'control',
+          code: {device: this.config.deviceId, state}
         }));
         callback(null);
       }
     }
 
     getPowerState(callback) {
-      if (!this.deviceStates || typeof this.deviceStates[this.config.deviceId] === 'undefined') {
-        this.log(`${this.id}: No power state found for device ${this.config.deviceId}`);
+      if (this.deviceState === undefined) {
+        this.log(`No power state found`);
         callback(new Error('Not found'));
       } else {
-        callback(null, this.deviceStates[this.config.deviceId]);
+        callback(null, this.deviceState);
       }
     }
 
@@ -117,12 +127,12 @@ module.exports = function (homebridge) {
 
     getServices() {
       // TODO
-      let informationService = new homebridge.hap.Service.AccessoryInformation()
+      const informationService = new homebridge.hap.Service.AccessoryInformation()
         .setCharacteristic(homebridge.hap.Characteristic.Manufacturer, 'Pilight Manufacturer')
         .setCharacteristic(homebridge.hap.Characteristic.Model, 'Pilight Model')
         .setCharacteristic(homebridge.hap.Characteristic.SerialNumber, 'Pilight Serial Number');
 
-      let switchService = new homebridge.hap.Service.Switch();
+      const switchService = new homebridge.hap.Service.Switch();
 
       switchService
         .getCharacteristic(homebridge.hap.Characteristic.On)
