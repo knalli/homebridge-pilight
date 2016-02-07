@@ -116,24 +116,23 @@ module.exports = function (homebridge) {
     }
 
     getServices() {
-
       // TODO
       let informationService = new homebridge.hap.Service.AccessoryInformation()
         .setCharacteristic(homebridge.hap.Characteristic.Manufacturer, 'Pilight Manufacturer')
         .setCharacteristic(homebridge.hap.Characteristic.Model, 'Pilight Model')
         .setCharacteristic(homebridge.hap.Characteristic.SerialNumber, 'Pilight Serial Number');
 
-      let lightbulbService = new homebridge.hap.Service.Lightbulb();
+      let switchService = new homebridge.hap.Service.Switch();
 
-      lightbulbService
+      switchService
         .getCharacteristic(homebridge.hap.Characteristic.On)
         .on('set', this.setPowerState.bind(this));
 
-      lightbulbService
+      switchService
         .getCharacteristic(homebridge.hap.Characteristic.On)
         .on('get', this.getPowerState.bind(this));
 
-      return [informationService, lightbulbService];
+      return [informationService, switchService];
     }
 
   }
