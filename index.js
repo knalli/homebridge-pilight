@@ -5,6 +5,10 @@ const utils = require('./lib/utils');
 const pluginName = 'homebridge-pilight';
 const accessoryName = 'pilight';
 
+// TODO extract actual WebsocketClient usage into a dedicated stage
+// => Observables API maybe?
+// => Allowing multiplexing connections
+
 module.exports = function (homebridge) {
 
   /**
@@ -56,7 +60,6 @@ module.exports = function (homebridge) {
       this.client.connect(pilightSocketAddress);
       this.log(`Connecting to "${pilightSocketAddress}"`);
 
-      // FIXME: Should cache/multiplex identical connections?
       this.client.on('connect', (connection) => {
         this.log(`Connection established!`);
         this._connection = connection; // hold reference to current connection
