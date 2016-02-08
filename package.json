@@ -20,6 +20,7 @@
   "author": "Jan Philipp <knallisworld@googlemail.com>",
   "license": "MIT",
   "dependencies": {
+    "eventemitter3": "^1.1.1",
     "websocket": "^1.0.22"
   },
   "devDependencies": {
