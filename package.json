@@ -1,6 +1,6 @@
 {
   "name": "homebridge-pilight",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Homebridge plugin connecting to pilight",
   "repository": {
     "type": "git",
