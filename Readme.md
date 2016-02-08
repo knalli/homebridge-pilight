@@ -27,13 +27,16 @@ Alternativly, add the dependency into your local project with
 
 The plugin registers itself as `pilight`. You have the following options:
 
-| Option | Default   |
-| ------ | --------- |
-| host   | localhost |
-| port   | 5001      |
-| device | lamp      |
+| Option   | Default   |
+| -------- | --------- |
+| host     | localhost |
+| port     | 5001      |
+| device   | lamp      |
+| sharedWS | false     |
 
 If you are running a pilight daemon on the same machine, you will probably skip both `host` and `port`.
+
+The optional setting `sharedWS = true` will share a single connection for devices addressing the same pilight instance. 
 
 Additionally you have the Homebridge options `accessory` (for the actual plugin) and `name` (for representation later).
 
@@ -53,7 +56,8 @@ Additionally you have the Homebridge options `accessory` (for the actual plugin)
     {
       "accessory": "pilight",
       "name": "My lamp",
-      "device": "lamp"
+      "device": "lamp",
+      "sharedWS": false
     }
   ],
   "platforms": [

@@ -7,7 +7,7 @@ const accessoryName = 'pilight';
 // TODO extract actual WebsocketClient usage into a dedicated stage
 // => Observables API maybe?
 // => Allowing multiplexing connections
-const WebSocketConnection = require('./lib/ws/WebSocketConnection');
+const WebSocketConnectionFactory = require('./lib/ws');
 
 module.exports = function (homebridge) {
 
@@ -32,7 +32,8 @@ module.exports = function (homebridge) {
       this.config = {
         host : config.host || 'localhost',
         port : config.port || 5001,
-        deviceId : config.device || 'lamp'
+        deviceId : config.device || 'lamp',
+        sharedWS : config.sharedWS || false
       };
 
       this.id = `name=${this.config.deviceId},ws://${this.config.host}:${this.config.port}/`;
@@ -41,7 +42,12 @@ module.exports = function (homebridge) {
 
     connect() {
       const pilightSocketAddress = `ws://${this.config.host}:${this.config.port}/`;
-      const connection = new WebSocketConnection(this.log, {address : pilightSocketAddress});
+      const connection = this.config.sharedWS
+        ? WebSocketConnectionFactory.shared(this.log, {address : pilightSocketAddress})
+        : WebSocketConnectionFactory.simple(this.log, {address : pilightSocketAddress});
+
+      this.log(`Option sharedWS = ${this.config.sharedWS}`)
+
       this.connection = connection;
       connection.connect();
 
