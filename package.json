@@ -30,7 +30,8 @@
   },
   "scripts": {
     "changelog": "conventional-changelog -i CHANGELOG.md -w -r 0",
-    "test": "jasmine",
-    "prepublish": "eslint **/*.js"
+    "test-jasmine": "jasmine",
+    "test-lint": "eslint **/*.js",
+    "test": "npm run -s test-lint && npm run -s test-jasmine"
   }
 }
