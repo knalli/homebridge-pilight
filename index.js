@@ -26,6 +26,7 @@ module.exports = function (homebridge) {
      */
     constructor(log, config) {
       this.log = log;
+      this.services = [];
 
       this.deviceState = undefined;
 
@@ -88,9 +89,21 @@ module.exports = function (homebridge) {
         if (json.devices.indexOf(this.config.deviceId) !== -1) {
           this.deviceState = json.values.state === 'on';
           this.log(`Updated internal state to "${json.values.state}"`);
+            
+        //Trigger an update to Homekit
+        var service = this.getServiceForDevice(this.config.deviceId);
+        service.getCharacteristic(homebridge.hap.Characteristic.On).setValue(this.deviceState);  
         }
       }
     }
+      
+ getServiceForDevice(device) {
+  var service = this.services.find(function(device, service) {
+    return (service.displayName == device);
+  }.bind(this, device));
+
+  return service;
+}  
 
     setPowerState(powerOn, callback) {
       if (!this.connection) {
@@ -127,7 +140,7 @@ module.exports = function (homebridge) {
         .setCharacteristic(homebridge.hap.Characteristic.Model, 'Pilight Model')
         .setCharacteristic(homebridge.hap.Characteristic.SerialNumber, 'Pilight Serial Number');
 
-      const switchService = new homebridge.hap.Service.Switch();
+      const switchService = new homebridge.hap.Service.Switch(this.config.deviceId);
 
       switchService
         .getCharacteristic(homebridge.hap.Characteristic.On)
@@ -136,6 +149,8 @@ module.exports = function (homebridge) {
       switchService
         .getCharacteristic(homebridge.hap.Characteristic.On)
         .on('get', this.getPowerState.bind(this));
+        
+      this.services.push(switchService);
 
       return [informationService, switchService];
     }
