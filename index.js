@@ -26,6 +26,7 @@ module.exports = function (homebridge) {
      */
     constructor(log, config) {
       this.log = log;
+      this.services = [];
 
       this.deviceState = undefined;
 
@@ -33,7 +34,8 @@ module.exports = function (homebridge) {
         host : config.host || 'localhost',
         port : config.port || 5001,
         deviceId : config.device || 'lamp',
-        sharedWS : config.sharedWS || false
+        sharedWS : config.sharedWS || false,
+        type : config.type || 'Switch'  
       };
 
       this.id = `name=${this.config.deviceId},ws://${this.config.host}:${this.config.port}/`;
@@ -78,19 +80,52 @@ module.exports = function (homebridge) {
           return item.devices.indexOf(this.config.deviceId) !== -1;
         });
         if (item) {
-          this.deviceState = item.values.state === 'on';
-          this.log(`Initialized device with state "${item.values.state}"`);
+          switch(this.config.type){
+              case "Switch":
+                  this.deviceState = item.values.state === 'on';
+                  this.log(`Initialized device with state "${item.values.state}"`);
+                  break;
+                  
+              case "TemperatureSensor":
+                  this.deviceState = item.values.temperature;
+                  this.log(`Initialized device with temperature "${item.values.temperature}"`);
+                  break;      
+          }    
         } else {
           this.log(`Could not find device with id "${this.config.deviceId}"`);
         }
       } else if (utils.isMessageOfTypeUpdate(json)) {
         // item update (after "control")
-        if (json.devices.indexOf(this.config.deviceId) !== -1) {
-          this.deviceState = json.values.state === 'on';
-          this.log(`Updated internal state to "${json.values.state}"`);
+        if (json.devices.indexOf(this.config.deviceId) !== -1) {    
+          let characteristic = "";
+          switch(this.config.type){
+              case "Switch":
+                  characteristic = homebridge.hap.Characteristic.On;
+                  this.deviceState = json.values.state === 'on';
+                  this.log(`Updated internal state to "${json.values.state}"`);
+                  break;
+                  
+              case "TemperatureSensor":
+                  characteristic = homebridge.hap.Characteristic.CurrentTemperature;
+                  this.deviceState = json.values.temperature;
+                  this.log(`Updated internal state to "${json.values.temperature}"`);
+                  break;      
+          }
+            
+        //Trigger an update to Homekit
+        var service = this.getServiceForDevice(this.config.deviceId);
+        service.getCharacteristic(characteristic).setValue(this.deviceState);  
         }
       }
     }
+      
+ getServiceForDevice(device) {
+  var service = this.services.find(function(device, service) {
+    return (service.displayName == device);
+  }.bind(this, device));
+
+  return service;
+}  
 
     setPowerState(powerOn, callback) {
       if (!this.connection) {
@@ -114,6 +149,15 @@ module.exports = function (homebridge) {
         callback(null, this.deviceState);
       }
     }
+      
+    getTemperature(callback) {
+      if (this.deviceState === undefined) {
+        this.log(`No temperature found`);
+        callback(new Error('Not found'));
+      } else {
+        callback(null, this.deviceState);
+      }
+    }  
 
     identify(callback) {
       this.log('Identify requested!');
@@ -122,13 +166,17 @@ module.exports = function (homebridge) {
 
     getServices() {
       // TODO
-      const informationService = new homebridge.hap.Service.AccessoryInformation()
+      let informationService = new homebridge.hap.Service.AccessoryInformation()
         .setCharacteristic(homebridge.hap.Characteristic.Manufacturer, 'Pilight Manufacturer')
         .setCharacteristic(homebridge.hap.Characteristic.Model, 'Pilight Model')
         .setCharacteristic(homebridge.hap.Characteristic.SerialNumber, 'Pilight Serial Number');
+        
+      this.services.push(informationService);
+        
+      if (this.config.type == "Switch") {
 
-      const switchService = new homebridge.hap.Service.Switch();
-
+      let switchService = new homebridge.hap.Service.Switch(this.config.deviceId);
+      
       switchService
         .getCharacteristic(homebridge.hap.Characteristic.On)
         .on('set', this.setPowerState.bind(this));
@@ -136,8 +184,22 @@ module.exports = function (homebridge) {
       switchService
         .getCharacteristic(homebridge.hap.Characteristic.On)
         .on('get', this.getPowerState.bind(this));
+        
+      this.services.push(switchService);     
+      }
+        
+      if (this.config.type == "TemperatureSensor") {
 
-      return [informationService, switchService];
+      let temperatureSensorService = new homebridge.hap.Service.TemperatureSensor(this.config.deviceId);
+      
+      temperatureSensorService
+        .getCharacteristic(homebridge.hap.Characteristic.CurrentTemperature)
+        .on('get', this.getTemperature.bind(this));
+          
+      this.services.push(temperatureSensorService);      
+      }
+      return this.services; 
+      
     }
 
   }
