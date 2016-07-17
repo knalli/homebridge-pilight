@@ -29,16 +29,20 @@ module.exports = function (homebridge) {
       this.services = [];
 
       this.deviceState = undefined;
+      this.dimLevel = undefined;
 
       this.config = {
         host : config.host || 'localhost',
         port : config.port || 5001,
         deviceId : config.device || 'lamp',
+        name : config.name || config.device || 'Lamp',
         sharedWS : config.sharedWS || false,
         type : config.type || 'Switch'
       };
 
       this.id = `name=${this.config.deviceId},ws://${this.config.host}:${this.config.port}/`;
+      this.name = config.name || this.config.device;
+
       this.connect();
     }
 
@@ -81,14 +85,20 @@ module.exports = function (homebridge) {
         });
         if (item) {
           switch (this.config.type) {
+            case "Dimmer":
+              this.deviceState = item.values.state === 'on';
+              this.dimLevel = item.values.dimlevel;
+              this.log(`Initialized dimmer with state "${this.deviceState}" and dim level ${this.dimLevel}`);
+              break;
+
             case "TemperatureSensor":
               this.deviceState = item.values.temperature;
-              this.log(`Initialized device with temperature "${item.values.temperature}"`);
+              this.log(`Initialized temp sensor with temperature ${this.deviceState}`);
               break;
-            default:
-              // or Switch
+
+            default: // or Switch
               this.deviceState = item.values.state === 'on';
-              this.log(`Initialized device with state "${item.values.state}"`);
+              this.log(`Initialized device with state "${this.deviceState}"`);
               break;
           }
         } else {
@@ -97,24 +107,37 @@ module.exports = function (homebridge) {
       } else if (utils.isMessageOfTypeUpdate(json)) {
         // item update (after "control")
         if (json.devices.indexOf(this.config.deviceId) !== -1) {
+          var service = this.getServiceForDevice(this.config.name);
           let characteristic = "";
           switch (this.config.type) {
-            case "TemperatureSensor":
-              characteristic = homebridge.hap.Characteristic.CurrentTemperature;
-              this.deviceState = json.values.temperature;
-              this.log(`Updated internal state to "${json.values.temperature}"`);
-              break;
-            default:
-              // or Switch
-              characteristic = homebridge.hap.Characteristic.On;
+            case "Dimmer":
               this.deviceState = json.values.state === 'on';
+              service.getCharacteristic(homebridge.hap.Characteristic.On).setValue(this.deviceState);
+
+              this.log(`Updated internal state to "${json.values.state}"`);
+
+              if (json.values.dimlevel != undefined) {
+                this.dimLevel = json.values.dimlevel;
+                service.getCharacteristic(homebridge.hap.Characteristic.Brightness).setValue(this.deviceState);
+
+                this.log(`Updated internal dim level to ${json.values.dimlevel}`);
+              }
+              break;
+
+            case "TemperatureSensor":
+              this.deviceState = json.values.temperature;
+              service.getCharacteristic(homebridge.hap.Characteristic.CurrentTemperature).setValue(this.deviceState);
+
+              this.log(`Updated internal temperature to ${json.values.temperature}`);
+              break;
+
+            default: // or Switch
+              this.deviceState = json.values.state === 'on';
+              service.getCharacteristic(homebridge.hap.Characteristic.On).setValue(this.deviceState);
+
               this.log(`Updated internal state to "${json.values.state}"`);
               break;
           }
-
-          //Trigger an update to Homekit
-          var service = this.getServiceForDevice(this.config.deviceId);
-          service.getCharacteristic(characteristic).setValue(this.deviceState);
         }
       }
     }
@@ -124,10 +147,50 @@ module.exports = function (homebridge) {
         return (service.displayName == device);
       }.bind(this, device));
     }
+    
+    getDimLevel(callback) {
+      if (this.dimLevel === undefined) {
+        this.log(`No dim level found`);
+        callback(new Error('Not found'));
+      } else {
+        this.log(`Current dim level "${this.dimLevel}"`);
+        callback(null, utils.dimlevelToBrightness(this.dimLevel));
+      }
+    }
+
+    setDimLevel(brightness, callback) {
+      if (!this.connection) {
+        callback(new Error('No connection'));
+      } else if (typeof(brightness) != "number") {
+        callback(new Error('Not a brightness value'));
+      } else if (brightness === 0) {
+        callback(null);
+      } else {
+        const dimlevel = utils.brightnessToDimlevel(brightness);
+        this.log(`Try to set dim level to ${dimlevel} for ${brightness}%`);
+        this.connection.send({
+          action : 'control',
+          code : {
+            device : this.config.deviceId,
+            values : { dimlevel } 
+          }
+        });
+        callback(null);
+      }
+    }
+    
+    getPowerState(callback) {
+      if (this.deviceState === undefined) {
+        this.log(`No power state found`);
+        callback(new Error('Not found'));
+      } else {
+        callback(null, this.deviceState);
+      }
+    }
 
     setPowerState(powerOn, callback) {
       if (!this.connection) {
-        callback(new Error('No connection'));
+        callback(new Error('No connection'));      
       } else {
         const state = powerOn ? 'on' : 'off';
         this.log(`Try to set powerstate to "${state}"`);
@@ -136,15 +199,6 @@ module.exports = function (homebridge) {
           code : {device : this.config.deviceId, state}
         });
         callback(null);
-      }
-    }
-
-    getPowerState(callback) {
-      if (this.deviceState === undefined) {
-        this.log(`No power state found`);
-        callback(new Error('Not found'));
-      } else {
-        callback(null, this.deviceState);
       }
     }
 
@@ -172,29 +226,52 @@ module.exports = function (homebridge) {
       this.services.push(informationService);
 
       switch (this.config.type) {
+        case 'Dimmer':
+          let dimmerService = new homebridge.hap.Service.Lightbulb(this.config.name);
+          dimmerService
+            .getCharacteristic(homebridge.hap.Characteristic.On)
+            .on('get', this.getPowerState.bind(this))
+            .on('set', this.setPowerState.bind(this));
+          dimmerService
+            .getCharacteristic(homebridge.hap.Characteristic.Brightness)
+            .setProps({
+              unit: null,
+              minValue: 1,
+              maxValue: 16
+            })
+            .on('get', this.getDimLevel.bind(this))
+            .on('set', this.setDimLevel.bind(this));
+          this.services.push(dimmerService);
+          break;
+
+        case 'Lamp':
+          let lampService = new homebridge.hap.Service.Lightbulb(this.config.name);
+          lampService
+            .getCharacteristic(homebridge.hap.Characteristic.On)
+            .on('get', this.getPowerState.bind(this))
+            .on('set', this.setPowerState.bind(this));
+          this.services.push(lampService);
+          break;
+
         case 'TemperatureSensor':
-          let temperatureSensorService = new homebridge.hap.Service.TemperatureSensor(this.config.deviceId);
+          let temperatureSensorService = new homebridge.hap.Service.TemperatureSensor(this.config.name);
           temperatureSensorService
             .getCharacteristic(homebridge.hap.Characteristic.CurrentTemperature)
             .on('get', this.getTemperature.bind(this));
           this.services.push(temperatureSensorService);
           break;
-        default:
-          // or Switch
-          let switchService = new homebridge.hap.Service.Switch(this.config.deviceId);
+          
+        default: // or Switch
+          let switchService = new homebridge.hap.Service.Switch(this.config.name);
           switchService
             .getCharacteristic(homebridge.hap.Characteristic.On)
+            .on('get', this.getPowerState.bind(this))
             .on('set', this.setPowerState.bind(this));
-          switchService
-            .getCharacteristic(homebridge.hap.Characteristic.On)
-            .on('get', this.getPowerState.bind(this));
           this.services.push(switchService);
           break;
       }
       return this.services;
-
     }
-
   }
 
   homebridge.registerAccessory(pluginName, accessoryName, PilightWebsocketAccessory);
