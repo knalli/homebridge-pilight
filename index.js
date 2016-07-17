@@ -67,7 +67,7 @@ module.exports = function (homebridge) {
 
       connection.emitter.on('connection::create', () => {
         // initial request all available values
-        this.log(`Requesting initial states...`);
+        this.log('Requesting initial states...');
         connection.send({action : 'request values'});
       });
 
@@ -108,6 +108,10 @@ module.exports = function (homebridge) {
         if (this.stateCallback !== null) {
           this.stateCallback(null);
           this.stateCallback = null;
+        } else {
+          service
+            .getCharacteristic(homebridge.hap.Characteristic.On)
+            .setValue(this.deviceState);
         }
       }
 
@@ -118,12 +122,20 @@ module.exports = function (homebridge) {
         if (this.dimLevelCallback !== null) {
           this.dimLevelCallback(null);
           this.dimLevelCallback = null;
+        } else {
+          service
+            .getCharacteristic(homebridge.hap.Characteristic.Brightness)
+            .setValue(utils.dimlevelToBrightness(this.dimLevel));
         }
       }
 
       if (item.values.temperature !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.CurrentTemperature)) {
         this.deviceState = item.values.temperature;
         this.log(`Updated internal temperature to ${item.values.temperature}`);
+
+        service
+          .getCharacteristic(homebridge.hap.Characteristic.CurrentTemperature)
+          .setValue(this.deviceState);
       }
     }
 
@@ -135,7 +147,7 @@ module.exports = function (homebridge) {
     
     getDimLevel(callback) {
       if (this.dimLevel === undefined) {
-        this.log(`No dim level found`);
+        this.log('No dim level found');
         callback(new Error('Not found'));
       } else {
         const brightness = utils.dimlevelToBrightness(this.dimLevel);
@@ -157,7 +169,7 @@ module.exports = function (homebridge) {
         return;        
       }
 
-      if (typeof(brightness) === "number") {
+      if (typeof(brightness) === 'number') {
         dimlevel = utils.brightnessToDimlevel(brightness);
       }
       
@@ -174,7 +186,7 @@ module.exports = function (homebridge) {
     
     getPowerState(callback) {
       if (this.deviceState === undefined) {
-        this.log(`No power state found`);
+        this.log('No power state found');
         callback(new Error('Not found'));
       } else {
         callback(null, this.deviceState);
@@ -200,7 +212,7 @@ module.exports = function (homebridge) {
 
     getTemperature(callback) {
       if (this.deviceState === undefined) {
-        this.log(`No temperature found`);
+        this.log('No temperature found');
         callback(new Error('Not found'));
       } else {
         callback(null, this.deviceState);
