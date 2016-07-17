@@ -235,15 +235,6 @@ module.exports = function (homebridge) {
           this.services.push(dimmerService);
           break;
 
-        case 'Lamp':
-          let lampService = new homebridge.hap.Service.Lightbulb(this.config.name);
-          lampService
-            .getCharacteristic(homebridge.hap.Characteristic.On)
-            .on('get', this.getPowerState.bind(this))
-            .on('set', this.setPowerState.bind(this));
-          this.services.push(lampService);
-          break;
-
         case 'TemperatureSensor':
           let temperatureSensorService = new homebridge.hap.Service.TemperatureSensor(this.config.name);
           temperatureSensorService
