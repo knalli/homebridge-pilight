@@ -122,7 +122,8 @@ module.exports = function (homebridge) {
         if (this.dimLevelCallback !== null) {
           this.dimLevelCallback(null);
           this.dimLevelCallback = null;
-        } else {
+        } else if (this.deviceState !== undefined && this.deviceState === true) {
+          // Only set the dim level if the device is on
           service
             .getCharacteristic(homebridge.hap.Characteristic.Brightness)
             .setValue(utils.dimlevelToBrightness(this.dimLevel));
@@ -146,9 +147,12 @@ module.exports = function (homebridge) {
     }
     
     getDimLevel(callback) {
-      if (this.dimLevel === undefined) {
+      if (this.deviceState === undefined || this.dimLevel === undefined) {
         this.log('No dim level found');
         callback(new Error('Not found'));
+      } else if (this.deviceState === false) {
+        this.log(`Current brightness is 0% because device is off`);
+        callback(null, 0);
       } else {
         const brightness = utils.dimlevelToBrightness(this.dimLevel);
         this.log(`Current dim level ${this.dimLevel} with brightness ${brightness}%`);
