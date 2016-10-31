@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "conventional-changelog-cli": "^1.0.0",
-    "eslint": "^3.0.1",
+    "eslint": "^3.9.1",
     "jasmine": "^2.3.2"
   },
   "scripts": {
