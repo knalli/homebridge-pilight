@@ -1,6 +1,7 @@
 'use strict';
 const utils = require('./lib/utils');
 
+const pck = require('./package.json');
 const pluginName = 'homebridge-pilight';
 const accessoryName = 'pilight';
 
@@ -39,6 +40,8 @@ module.exports = function (homebridge) {
       };
 
       this.id = `name=${this.config.deviceId},ws://${this.config.host}:${this.config.port}/`;
+
+      this.log(`Running ${pck.name}@${pck.version}`);
       this.connect();
     }
 
