@@ -4,6 +4,8 @@ const utils = require('./lib/utils');
 const pluginName = 'homebridge-pilight';
 const accessoryName = 'pilight';
 
+const TRACE_ENABLED = process.env.HOMEBRIDGE_PILIGHT_TRACE === '1';
+
 // TODO extract actual WebsocketClient usage into a dedicated stage
 // => Observables API maybe?
 // => Allowing multiplexing connections
@@ -72,6 +74,9 @@ module.exports = function (homebridge) {
       });
 
       connection.emitter.on('message::receive', (body) => {
+        if (TRACE_ENABLED) {
+          this.log('TRACE: message::receive: ' + (body && body.toString()));
+        }
         this.handleMessage(body);
       });
 
