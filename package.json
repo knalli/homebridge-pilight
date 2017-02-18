@@ -15,7 +15,7 @@
   ],
   "engines": {
     "homebridge": ">=0.2.5",
-    "node": ">=4.2"
+    "node": ">=4.3"
   },
   "author": "Jan Philipp <knallisworld@googlemail.com>",
   "license": "MIT",
