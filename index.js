@@ -74,9 +74,6 @@ module.exports = function (homebridge) {
       });
 
       connection.emitter.on('message::receive', (body) => {
-        if (TRACE_ENABLED) {
-          this.log('TRACE: message::receive: ' + (body && body.toString()));
-        }
         this.handleMessage(body);
       });
 
@@ -102,6 +99,10 @@ module.exports = function (homebridge) {
 
       if (item === null) {
         return;
+      }
+
+      if (TRACE_ENABLED) {
+        this.log('TRACE: handleMessage: item=' + (item && JSON.stringify(item)));
       }
 
       let service = this.getServiceForDevice(this.config.name);
