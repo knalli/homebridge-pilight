@@ -1,7 +1,9 @@
 'use strict';
 const utils = require('./lib/utils');
+const pgk = require('./package.json');
+const logDecorator = require('./lib/logDecorator');
 
-const pluginName = 'homebridge-pilight';
+const pluginName = pgk.name;
 const accessoryName = 'pilight';
 
 const TRACE_ENABLED = process.env.HOMEBRIDGE_PILIGHT_TRACE === '1';
@@ -27,7 +29,7 @@ module.exports = function (homebridge) {
      * @param config
      */
     constructor(log, config) {
-      this.log = log;
+      this.log = logDecorator(log, {prefix : `[${pluginName}] `});
       this.services = [];
 
       this.deviceState = undefined;
@@ -46,7 +48,9 @@ module.exports = function (homebridge) {
       this.name = config.name || this.config.device;
 
       this.stateCallback = null;
-      this.dimLevelCallback = null;      
+      this.dimLevelCallback = null;
+
+      this.log(`Plugin '${pluginName} ${pgk.version}' registered as: plugin='${pluginName}', accessory='${accessoryName}', name='${this.name}'`);
 
       this.connect();
     }
@@ -57,7 +61,9 @@ module.exports = function (homebridge) {
         ? WebSocketConnectionFactory.shared(this.log, {address : pilightSocketAddress})
         : WebSocketConnectionFactory.simple(this.log, {address : pilightSocketAddress});
 
-      this.log(`Option sharedWS = ${this.config.sharedWS}`)
+      if (this.config.sharedWS) {
+        this.log('Multiplexing WebSocket connections enabled (option sharedWS=true)');
+      }
 
       this.connection = connection;
       connection.connect();
@@ -151,7 +157,7 @@ module.exports = function (homebridge) {
         return (service.displayName == device);
       }.bind(this, device));
     }
-    
+
     getDimLevel(callback) {
       if (this.deviceState === undefined || this.dimLevel === undefined) {
         this.log('No dim level found');
@@ -176,24 +182,24 @@ module.exports = function (homebridge) {
 
       if (brightness === false || brightness === 0) {
         callback(null);
-        return;        
+        return;
       }
 
       if (typeof(brightness) === 'number') {
         dimlevel = utils.brightnessToDimlevel(brightness);
       }
-      
+
       this.log(`Try to set dim level to ${dimlevel} for value ${brightness}`);
       this.dimLevelCallback = callback;
       this.connection.send({
         action : 'control',
         code : {
           device : this.config.deviceId,
-          values : { dimlevel } 
+          values : {dimlevel}
         }
-      });      
+      });
     }
-    
+
     getPowerState(callback) {
       if (this.deviceState === undefined) {
         this.log('No power state found');
@@ -264,7 +270,7 @@ module.exports = function (homebridge) {
             .on('get', this.getTemperature.bind(this));
           this.services.push(temperatureSensorService);
           break;
-          
+
         default: // or Switch
           let switchService = new homebridge.hap.Service.Switch(this.config.name);
           switchService
