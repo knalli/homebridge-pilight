@@ -39,7 +39,7 @@ If you are running a pilight daemon on the same machine, you will probably skip 
 
 The optional setting `sharedWS = true` will share a single connection for devices addressing the same pilight instance.
 
-The Setting `type = "type"` can be "Switch" or "TemperatureSensor".
+The Setting `type = "type"` can be "Switch", "TemperatureSensor" or "Dimmer".
 
 Additionally you have the Homebridge options `accessory` (for the actual plugin) and `name` (for representation later).
 
