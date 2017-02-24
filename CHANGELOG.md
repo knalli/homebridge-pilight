@@ -1,10 +1,48 @@
+<a name="1.4.0"></a>
+# 1.4.0 (2017-02-24)
+
+* chore(): add trace/debug logging ([b2263f7](https://github.com/knalli/homebridge-pilight/commit/b2263f7))
+* chore(): fix formatting/lint issues ([35fc583](https://github.com/knalli/homebridge-pilight/commit/35fc583))
+* chore(): upgrade dev primary NodeJS to 6.9 ([f527d78](https://github.com/knalli/homebridge-pilight/commit/f527d78))
+* Bump version ([00e2c33](https://github.com/knalli/homebridge-pilight/commit/00e2c33))
+* Bump version to release ([3b2988f](https://github.com/knalli/homebridge-pilight/commit/3b2988f))
+* Fixup for c48315f (supporting NodeJS v4) ([267a54a](https://github.com/knalli/homebridge-pilight/commit/267a54a))
+* feat(): improve logging ([c48315f](https://github.com/knalli/homebridge-pilight/commit/c48315f))
+* feat(): update target support for NodeJS ([c11f43f](https://github.com/knalli/homebridge-pilight/commit/c11f43f))
+
+
+
+<a name="1.4.0-beta.1"></a>
+# 1.4.0-beta.1 (2017-02-16)
+
+* chore(): add trace/debug logging ([8080263](https://github.com/knalli/homebridge-pilight/commit/8080263))
+* chore(): log plugin’s version ([4ecb88e](https://github.com/knalli/homebridge-pilight/commit/4ecb88e))
+* chore(package): update eventemitter3 to version 2.0.0 (#18) ([88d2c42](https://github.com/knalli/homebridge-pilight/commit/88d2c42))
+* Bump version to 1.4.0-beta.1 ([4887510](https://github.com/knalli/homebridge-pilight/commit/4887510))
+
+
+
+<a name="1.4.0-beta.0"></a>
+# 1.4.0-beta.0 (2016-08-21)
+
+* Added support for dimmers and light bulbs ([6dfa992](https://github.com/knalli/homebridge-pilight/commit/6dfa992))
+* beta 1.4.0-beta.0 ([399707d](https://github.com/knalli/homebridge-pilight/commit/399707d))
+* Fix power state when dimming level is set ([b2587bb](https://github.com/knalli/homebridge-pilight/commit/b2587bb))
+* Improved handling of messages and callbacks ([6daef5a](https://github.com/knalli/homebridge-pilight/commit/6daef5a))
+* Readded setValue calls from #14 for updates from other sources ([6ce5ed1](https://github.com/knalli/homebridge-pilight/commit/6ce5ed1))
+* Removed specific Lamp type, you can do this from Homekit ([5454c60](https://github.com/knalli/homebridge-pilight/commit/5454c60))
+* Updated Readme and applied some code fixes ([8bf4b1b](https://github.com/knalli/homebridge-pilight/commit/8bf4b1b))
+
+
+
 <a name="1.3.0"></a>
 # 1.3.0 (2016-07-05)
 
+* Release 1.3.0 ([9c59c3b](https://github.com/knalli/homebridge-pilight/commit/9c59c3b))
+* Update eslint to version 2.5.1 ([2d48488](https://github.com/knalli/homebridge-pilight/commit/2d48488))
 * chore(package): improve npm scriptlets ([fdf1c57](https://github.com/knalli/homebridge-pilight/commit/fdf1c57))
 * chore(package): update eslint to version 3.0.1 ([c83904c](https://github.com/knalli/homebridge-pilight/commit/c83904c))
 * feat(): add trigger updating HomeKit for physical remotes ([07713e5](https://github.com/knalli/homebridge-pilight/commit/07713e5))
-* Update eslint to version 2.5.1 ([2d48488](https://github.com/knalli/homebridge-pilight/commit/2d48488))
 
 
 
