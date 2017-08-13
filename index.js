@@ -93,9 +93,16 @@ module.exports = function (homebridge) {
 
       if (utils.isMessageOfTypeValues(json)) {
         // bulk update ("request values")
-        item = json.find((item) => {
-          return item.devices.indexOf(this.config.deviceId) !== -1;
-        });
+        if (json.message === 'values') {
+          // $.message & $.values is available pilight 8+
+          item = json.values.find((item) => {
+            return item.devices.indexOf(this.config.deviceId) !== -1;
+          });
+        } else {
+          item = json.find((item) => {
+            return item.devices.indexOf(this.config.deviceId) !== -1;
+          });
+        }
       } else if (utils.isMessageOfTypeUpdate(json)) {
         // item update (after "control")
         if (json.devices.indexOf(this.config.deviceId) !== -1) {

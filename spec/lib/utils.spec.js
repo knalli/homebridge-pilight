@@ -111,6 +111,17 @@ describe('lib/utils', () => {
         }];
         expect(utils.isMessageOfTypeValues(messages)).toBe(true);
       });
+      it('for pilight 8+', () => {
+        let messages = {
+          message: 'values',
+          values: [{
+            type : 'anything',
+            devices : [],
+            values : {}
+          }]
+        };
+        expect(utils.isMessageOfTypeValues(messages)).toBe(true);
+      });
     });
 
     it('should return true for a values message even when a second value would not fit', () => {
@@ -155,6 +166,18 @@ describe('lib/utils', () => {
 
       it('(undefined)', () => {
         let messages = undefined;
+        expect(utils.isMessageOfTypeValues(messages)).toBe(false);
+      });
+
+      it('invalid $.type', () => {
+        let messages = {
+          message: 'other-values',
+          values: [{
+            type : 'anything',
+            devices : [],
+            values : {}
+          }]
+        };
         expect(utils.isMessageOfTypeValues(messages)).toBe(false);
       });
     });
