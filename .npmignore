@@ -1,3 +1,5 @@
 spec
 .eslintrc
 .travis.yml
+*.iml
+.idea
