@@ -1,12 +1,26 @@
+<a name="1.4.1"></a>
+## 1.4.1 (2017-08-17)
+
+* Bump version ([a5a2732](https://github.com/knalli/homebridge-pilight/commit/a5a2732))
+* Update copyright ([b574987](https://github.com/knalli/homebridge-pilight/commit/b574987))
+* fix: add support for next pilight version ([bef3b92](https://github.com/knalli/homebridge-pilight/commit/bef3b92))
+* chore: add missing ignores ([cf85e9c](https://github.com/knalli/homebridge-pilight/commit/cf85e9c))
+* chore: update NodeJS testing targets ([5a77d11](https://github.com/knalli/homebridge-pilight/commit/5a77d11))
+* chore(package): update eslint to version 4.4.1 ([2d7edfd](https://github.com/knalli/homebridge-pilight/commit/2d7edfd)), closes [#24](https://github.com/knalli/homebridge-pilight/issues/24)
+* docs(readme): add Greenkeeper badge ([a6b8c65](https://github.com/knalli/homebridge-pilight/commit/a6b8c65))
+
+
+
 <a name="1.4.0"></a>
 # 1.4.0 (2017-02-24)
 
-* chore(): add trace/debug logging ([b2263f7](https://github.com/knalli/homebridge-pilight/commit/b2263f7))
-* chore(): fix formatting/lint issues ([35fc583](https://github.com/knalli/homebridge-pilight/commit/35fc583))
-* chore(): upgrade dev primary NodeJS to 6.9 ([f527d78](https://github.com/knalli/homebridge-pilight/commit/f527d78))
 * Bump version ([00e2c33](https://github.com/knalli/homebridge-pilight/commit/00e2c33))
 * Bump version to release ([3b2988f](https://github.com/knalli/homebridge-pilight/commit/3b2988f))
 * Fixup for c48315f (supporting NodeJS v4) ([267a54a](https://github.com/knalli/homebridge-pilight/commit/267a54a))
+* Release 1.4.0 ([e1b6102](https://github.com/knalli/homebridge-pilight/commit/e1b6102))
+* chore(): add trace/debug logging ([b2263f7](https://github.com/knalli/homebridge-pilight/commit/b2263f7))
+* chore(): fix formatting/lint issues ([35fc583](https://github.com/knalli/homebridge-pilight/commit/35fc583))
+* chore(): upgrade dev primary NodeJS to 6.9 ([f527d78](https://github.com/knalli/homebridge-pilight/commit/f527d78))
 * feat(): improve logging ([c48315f](https://github.com/knalli/homebridge-pilight/commit/c48315f))
 * feat(): update target support for NodeJS ([c11f43f](https://github.com/knalli/homebridge-pilight/commit/c11f43f))
 
