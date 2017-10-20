@@ -157,6 +157,26 @@ module.exports = function (homebridge) {
           .getCharacteristic(homebridge.hap.Characteristic.CurrentTemperature)
           .setValue(this.deviceState);
       }
+
+      if (item.values.state !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.MotionDetected)) {
+        this.deviceState = item.values.state === 'on' || item.values.state === 'open';
+        this.log(`Updated internal state to "${item.values.state}"`);
+
+        service
+          .getCharacteristic(homebridge.hap.Characteristic.MotionDetected)
+          .setValue(this.deviceState);
+        
+      }
+
+      if (item.values.state !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.ContactSensorState)) {
+        this.deviceState = item.values.state === 'on' || item.values.state === 'open';
+        this.log(`Updated internal state to "${item.values.state}"`);
+
+        service
+          .getCharacteristic(homebridge.hap.Characteristic.ContactSensorState)
+          .setValue(this.deviceState);
+        
+      }
     }
 
     getServiceForDevice(device) {
@@ -277,6 +297,22 @@ module.exports = function (homebridge) {
             .on('get', this.getTemperature.bind(this));
           this.services.push(temperatureSensorService);
           break;
+
+        case 'MotionSensor':
+          let motionSensorService = new homebridge.hap.Service.MotionSensor(this.config.name);
+          motionSensorService
+            .getCharacteristic(homebridge.hap.Characteristic.MotionDetected)
+            .on('get', this.getPowerState.bind(this));
+          this.services.push(motionSensorService);
+          break;
+          
+        case 'ContactSensor':
+          let contactSensorService = new homebridge.hap.Service.ContactSensor(this.config.name);
+          contactSensorService
+            .getCharacteristic(homebridge.hap.Characteristic.ContactSensorState)
+            .on('get', this.getPowerState.bind(this));
+          this.services.push(contactSensorService);
+          break;   
 
         default: // or Switch
           let switchService = new homebridge.hap.Service.Switch(this.config.name);
