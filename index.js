@@ -312,7 +312,16 @@ module.exports = function (homebridge) {
             .getCharacteristic(homebridge.hap.Characteristic.ContactSensorState)
             .on('get', this.getPowerState.bind(this));
           this.services.push(contactSensorService);
-          break;   
+          break;
+
+        case 'Outlet':
+          let outletService = new homebridge.hap.Service.Outlet(this.config.name);
+          outletService
+            .getCharacteristic(homebridge.hap.Characteristic.On)
+            .on('get', this.getPowerState.bind(this))
+            .on('set', this.setPowerState.bind(this));
+          this.services.push(contactSensorService);
+          break;
 
         default: // or Switch
           let switchService = new homebridge.hap.Service.Switch(this.config.name);
