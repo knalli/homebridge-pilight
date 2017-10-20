@@ -173,7 +173,7 @@ module.exports = function (homebridge) {
         this.log(`Updated internal state to "${item.values.state}"`);
 
         service
-          .getCharacteristic(homebridge.hap.Characteristic.ContactSensorState)
+          .getCharacteristic(homebridge.hap.Characteristic.ContactSensorState) 
           .setValue(this.deviceState);
         
       }
@@ -184,8 +184,8 @@ module.exports = function (homebridge) {
 
         if (this.deviceState === true) {
           service
-            .getCharacteristic(homebridge.hap.Characteristic.ContactSensorState)
-            setValue(this.deviceState);
+            .getCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)
+            .setValue(0);
         }
       }
     }
@@ -347,7 +347,7 @@ module.exports = function (homebridge) {
         default: // or Switch
           let switchService = new homebridge.hap.Service.Switch(this.config.name);
           switchService
-            .getCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)
+            .getCharacteristic(homebridge.hap.Characteristic.On)
             .on('get', this.getPowerState.bind(this))
             .on('set', this.setPowerState.bind(this));
           this.services.push(switchService);
