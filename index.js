@@ -178,7 +178,7 @@ module.exports = function (homebridge) {
         
       }
 
-      if (item.values.state !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.StatelessProgrammableSwitch)) {
+      if (item.values.state !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)) {
         this.deviceState = item.values.state === 'on';
         this.log(`Updated internal state to "${item.values.state}"`);
 
