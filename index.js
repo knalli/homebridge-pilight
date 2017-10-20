@@ -337,7 +337,7 @@ module.exports = function (homebridge) {
         case 'ProgrammableSwitch':
           let statelessProgrammableSwitchService = new homebridge.hap.Service.StatelessProgrammableSwitch(this.config.name);
           statelessProgrammableSwitchService
-            .getCharacteristic(homebridge.hap.Characteristic.On)
+            .getCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)
             .setProps({
               maxValue: 0
             });
