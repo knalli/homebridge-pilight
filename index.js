@@ -185,7 +185,7 @@ module.exports = function (homebridge) {
         if (this.deviceState === true) {
           service
             .getCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)
-            .setValue(this.deviceState);
+            .setValue(0);
         }
       }
     }
