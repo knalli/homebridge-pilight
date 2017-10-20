@@ -347,7 +347,7 @@ module.exports = function (homebridge) {
         default: // or Switch
           let switchService = new homebridge.hap.Service.Switch(this.config.name);
           switchService
-            .getCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)
+            .getCharacteristic(homebridge.hap.Characteristic.On)
             .on('get', this.getPowerState.bind(this))
             .on('set', this.setPowerState.bind(this));
           this.services.push(switchService);
