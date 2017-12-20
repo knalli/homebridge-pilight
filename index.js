@@ -149,6 +149,15 @@ module.exports = function (homebridge) {
         }
       }
 
+      if (item.values.humidity !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.CurrentRelativeHumidity)) {
+        this.deviceState = item.values.humidity;
+        this.log(`Updated internal humidity to ${item.values.humidity}`);
+
+        service
+          .getCharacteristic(homebridge.hap.Characteristic.CurrentRelativeHumidity)
+          .setValue(this.deviceState);
+      }
+
       if (item.values.temperature !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.CurrentTemperature)) {
         this.deviceState = item.values.temperature;
         this.log(`Updated internal temperature to ${item.values.temperature}`);
@@ -233,6 +242,15 @@ module.exports = function (homebridge) {
       }
     }
 
+    getHumidity(callback) {
+      if (this.deviceState === undefined) {
+        this.log('No humidity found');
+        callback(new Error('Not found'));
+      } else {
+        callback(null, this.deviceState);
+      }
+    }
+
     getTemperature(callback) {
       if (this.deviceState === undefined) {
         this.log('No temperature found');
@@ -276,6 +294,14 @@ module.exports = function (homebridge) {
             .getCharacteristic(homebridge.hap.Characteristic.CurrentTemperature)
             .on('get', this.getTemperature.bind(this));
           this.services.push(temperatureSensorService);
+          break;
+
+        case 'HumiditySensor':
+          let humiditySensorService = new homebridge.hap.Service.HumiditySensor(this.config.name);
+          humiditySensorService
+            .getCharacteristic(homebridge.hap.Characteristic.CurrentRelativeHumidity)
+            .on('get', this.getHumidity.bind(this));
+          this.services.push(humiditySensorService);
           break;
 
         default: // or Switch
