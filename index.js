@@ -201,7 +201,7 @@ module.exports = function (homebridge) {
 
     getServiceForDevice(device) {
       return this.services.find(function (device, service) {
-        return (service.displayName == device);
+        return (service.displayName === device);
       }.bind(this, device));
     }
 
@@ -210,7 +210,7 @@ module.exports = function (homebridge) {
         this.log('No dim level found');
         callback(new Error('Not found'));
       } else if (this.deviceState === false) {
-        this.log(`Current brightness is 0% because device is off`);
+        this.log('Current brightness is 0% because device is off');
         callback(null, 0);
       } else {
         const brightness = utils.dimlevelToBrightness(this.dimLevel);
@@ -259,7 +259,7 @@ module.exports = function (homebridge) {
     setPowerState(powerOn, callback) {
       if (!this.connection) {
         callback(new Error('No connection'));
-      } else if (powerOn == this.deviceState) {
+      } else if (powerOn === this.deviceState) {
         callback(null);
       } else {
         const state = powerOn ? 'on' : 'off';
@@ -306,7 +306,7 @@ module.exports = function (homebridge) {
       this.services.push(informationService);
 
       switch (this.config.type) {
-        case 'Dimmer':
+        case 'Dimmer': {
           let dimmerService = new homebridge.hap.Service.Lightbulb(this.config.name);
           dimmerService
             .getCharacteristic(homebridge.hap.Characteristic.On)
@@ -318,32 +318,36 @@ module.exports = function (homebridge) {
             .on('set', this.setDimLevel.bind(this));
           this.services.push(dimmerService);
           break;
+        }
 
-        case 'TemperatureSensor':
+        case 'TemperatureSensor': {
           let temperatureSensorService = new homebridge.hap.Service.TemperatureSensor(this.config.name);
           temperatureSensorService
             .getCharacteristic(homebridge.hap.Characteristic.CurrentTemperature)
             .on('get', this.getTemperature.bind(this));
           this.services.push(temperatureSensorService);
           break;
+        }
 
-        case 'MotionSensor':
+        case 'MotionSensor': {
           let motionSensorService = new homebridge.hap.Service.MotionSensor(this.config.name);
           motionSensorService
             .getCharacteristic(homebridge.hap.Characteristic.MotionDetected)
             .on('get', this.getPowerState.bind(this));
           this.services.push(motionSensorService);
           break;
+        }
 
-        case 'ContactSensor':
+        case 'ContactSensor': {
           let contactSensorService = new homebridge.hap.Service.ContactSensor(this.config.name);
           contactSensorService
             .getCharacteristic(homebridge.hap.Characteristic.ContactSensorState)
             .on('get', this.getPowerState.bind(this));
           this.services.push(contactSensorService);
           break;
+        }
 
-        case 'Outlet':
+        case 'Outlet': {
           let outletService = new homebridge.hap.Service.Outlet(this.config.name);
           outletService
             .getCharacteristic(homebridge.hap.Characteristic.On)
@@ -351,8 +355,9 @@ module.exports = function (homebridge) {
             .on('set', this.setPowerState.bind(this));
           this.services.push(outletService);
           break;
+        }
 
-        case 'ProgrammableSwitch':
+        case 'ProgrammableSwitch': {
           let statelessProgrammableSwitchService = new homebridge.hap.Service.StatelessProgrammableSwitch(this.config.name);
           statelessProgrammableSwitchService
             .getCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)
@@ -361,16 +366,18 @@ module.exports = function (homebridge) {
             });
           this.services.push(statelessProgrammableSwitchService);
           break;
+        }
 
-        case 'HumiditySensor':
+        case 'HumiditySensor': {
           let humiditySensorService = new homebridge.hap.Service.HumiditySensor(this.config.name);
           humiditySensorService
             .getCharacteristic(homebridge.hap.Characteristic.CurrentRelativeHumidity)
             .on('get', this.getHumidity.bind(this));
           this.services.push(humiditySensorService);
           break;
+        }
 
-        default: // or Switch
+        default: { // or Switch
           let switchService = new homebridge.hap.Service.Switch(this.config.name);
           switchService
             .getCharacteristic(homebridge.hap.Characteristic.On)
@@ -378,6 +385,7 @@ module.exports = function (homebridge) {
             .on('set', this.setPowerState.bind(this));
           this.services.push(switchService);
           break;
+        }
       }
       return this.services;
     }
