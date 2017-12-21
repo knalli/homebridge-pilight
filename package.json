@@ -31,7 +31,7 @@
   "scripts": {
     "changelog": "conventional-changelog -i CHANGELOG.md -w -r 0",
     "test-jasmine": "jasmine",
-    "test-lint": "eslint **/*.js",
+    "test-lint": "eslint index.js **/*.js",
     "test": "npm run -s test-lint && npm run -s test-jasmine"
   }
 }
