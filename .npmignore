@@ -3,3 +3,4 @@ spec
 .travis.yml
 *.iml
 .idea
+package-lock.json
