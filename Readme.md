@@ -15,12 +15,12 @@ to enable this api and the configured port is not blocked by any firewall.
 
 **Important: This plugin is using ES6/ES2015. Please use an appropriate environment like NodeJS v4 or higher.**
 
-If you have already installed homebridge globally, just install 
+If you have already installed homebridge globally, just install
 
 ```npm install -g homebridge-pilight```
 
 Alternativly, add the dependency into your local project with
- 
+
 ```npm install -S homebridge-pilight```
 
 ## Configuration
@@ -39,7 +39,7 @@ If you are running a pilight daemon on the same machine, you will probably skip 
 
 The optional setting `sharedWS = true` will share a single connection for devices addressing the same pilight instance.
 
-The Setting `type = "type"` can be "Switch", "TemperatureSensor" or "Dimmer".
+The Setting `type = "type"` can be "Switch", "TemperatureSensor", "HumiditySensor" or "Dimmer".
 
 Additionally you have the Homebridge options `accessory` (for the actual plugin) and `name` (for representation later).
 
