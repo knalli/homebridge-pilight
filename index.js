@@ -157,6 +157,37 @@ module.exports = function (homebridge) {
           .getCharacteristic(homebridge.hap.Characteristic.CurrentTemperature)
           .setValue(this.deviceState);
       }
+
+      if (item.values.state !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.MotionDetected)) {
+        this.deviceState = item.values.state === 'on' || item.values.state === 'open';
+        this.log(`Updated internal state to "${item.values.state}"`);
+
+        service
+          .getCharacteristic(homebridge.hap.Characteristic.MotionDetected)
+          .setValue(this.deviceState);
+        
+      }
+
+      if (item.values.state !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.ContactSensorState)) {
+        this.deviceState = item.values.state === 'on' || item.values.state === 'open';
+        this.log(`Updated internal state to "${item.values.state}"`);
+
+        service
+          .getCharacteristic(homebridge.hap.Characteristic.ContactSensorState) 
+          .setValue(this.deviceState);
+        
+      }
+
+      if (item.values.state !== undefined && service.testCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)) {
+        this.deviceState = item.values.state === 'on';
+        this.log(`Updated internal state to "${item.values.state}"`);
+
+        if (this.deviceState === true) {
+          service
+            .getCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)
+            .setValue(0);
+        }
+      }
     }
 
     getServiceForDevice(device) {
@@ -277,6 +308,41 @@ module.exports = function (homebridge) {
             .on('get', this.getTemperature.bind(this));
           this.services.push(temperatureSensorService);
           break;
+
+        case 'MotionSensor':
+          let motionSensorService = new homebridge.hap.Service.MotionSensor(this.config.name);
+          motionSensorService
+            .getCharacteristic(homebridge.hap.Characteristic.MotionDetected)
+            .on('get', this.getPowerState.bind(this));
+          this.services.push(motionSensorService);
+          break;
+          
+        case 'ContactSensor':
+          let contactSensorService = new homebridge.hap.Service.ContactSensor(this.config.name);
+          contactSensorService
+            .getCharacteristic(homebridge.hap.Characteristic.ContactSensorState)
+            .on('get', this.getPowerState.bind(this));
+          this.services.push(contactSensorService);
+          break;
+
+        case 'Outlet':
+          let outletService = new homebridge.hap.Service.Outlet(this.config.name);
+          outletService
+            .getCharacteristic(homebridge.hap.Characteristic.On)
+            .on('get', this.getPowerState.bind(this))
+            .on('set', this.setPowerState.bind(this));
+          this.services.push(outletService);
+          break;
+
+        case 'ProgrammableSwitch':
+          let statelessProgrammableSwitchService = new homebridge.hap.Service.StatelessProgrammableSwitch(this.config.name);
+          statelessProgrammableSwitchService
+            .getCharacteristic(homebridge.hap.Characteristic.ProgrammableSwitchEvent)
+            .setProps({
+              maxValue: 0
+            });
+          this.services.push(statelessProgrammableSwitchService);
+          break;  
 
         default: // or Switch
           let switchService = new homebridge.hap.Service.Switch(this.config.name);
