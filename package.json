@@ -24,7 +24,7 @@
     "websocket": "^1.0.25"
   },
   "devDependencies": {
-    "conventional-changelog-cli": "^1.0.0",
+    "conventional-changelog-cli": "^2.0.0",
     "eslint": "^4.13.1",
     "jasmine": "^2.3.2"
   },
