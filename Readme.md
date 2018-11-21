@@ -71,4 +71,4 @@ Additionally you have the Homebridge options `accessory` (for the actual plugin)
 
 ## License
 
-Copyright 2017 by Jan Philipp. Licensed under MIT.
+Copyright 2018 by Jan Philipp. Licensed under MIT.
