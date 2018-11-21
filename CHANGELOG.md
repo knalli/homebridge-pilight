@@ -1,5 +1,23 @@
-<a name="1.5.0"></a>
-# 1.5.0 (2017-12-21)
+## 2.0.0 (2018-11-21)
+
+* Add a message queue on `SharedWebSocketConnections` ([fb7795a](https://github.com/knalli/homebridge-pilight/commit/fb7795a))
+* Bump min node engine to latest 6 lts ([2b469e6](https://github.com/knalli/homebridge-pilight/commit/2b469e6))
+* Bump version ([202eaa6](https://github.com/knalli/homebridge-pilight/commit/202eaa6))
+* Fill missing license placeholders ([5c1d38b](https://github.com/knalli/homebridge-pilight/commit/5c1d38b))
+* Fix the undefined message spam ([0266f61](https://github.com/knalli/homebridge-pilight/commit/0266f61))
+* Fixup ([1b55afc](https://github.com/knalli/homebridge-pilight/commit/1b55afc))
+* Fixup 0a8e53f ([4d90757](https://github.com/knalli/homebridge-pilight/commit/4d90757))
+* Update copyright ([422ee1f](https://github.com/knalli/homebridge-pilight/commit/422ee1f))
+* chore: update dependencies to latest in range ([414e89b](https://github.com/knalli/homebridge-pilight/commit/414e89b))
+* chore(dev): update dev NodeJS to 10 LTS (latest) ([d2c8928](https://github.com/knalli/homebridge-pilight/commit/d2c8928))
+* chore(NodeJS): Add 10 (lts), 11 (current); remove 4 (eol) ([0a8e53f](https://github.com/knalli/homebridge-pilight/commit/0a8e53f))
+* chore(package): update conventional-changelog-cli to version 2.0.0 ([f6e4cc8](https://github.com/knalli/homebridge-pilight/commit/f6e4cc8))
+* chore(package): update eslint to version 5.0.0 ([242c895](https://github.com/knalli/homebridge-pilight/commit/242c895))
+* chore(package): update jasmine to version 3.0.0 ([20a9486](https://github.com/knalli/homebridge-pilight/commit/20a9486))
+
+
+
+## 1.5.0 (2017-12-21)
 
 * Add package-lock.json ([7fee296](https://github.com/knalli/homebridge-pilight/commit/7fee296))
 * add ProgrammableSwitch ([8a26311](https://github.com/knalli/homebridge-pilight/commit/8a26311))
@@ -14,6 +32,7 @@
 * fix ProgrammableSwitch ([1ad191f](https://github.com/knalli/homebridge-pilight/commit/1ad191f))
 * Ignore package-lock.json on publishing ([434f774](https://github.com/knalli/homebridge-pilight/commit/434f774))
 * Reconsider target NodeJS ([42b752f](https://github.com/knalli/homebridge-pilight/commit/42b752f))
+* Release 1.5.0 ([3b8720a](https://github.com/knalli/homebridge-pilight/commit/3b8720a))
 * Update index.js ([3301a0d](https://github.com/knalli/homebridge-pilight/commit/3301a0d))
 * fix: outlet service ([1271e5b](https://github.com/knalli/homebridge-pilight/commit/1271e5b))
 * fix(package): update eventemitter3 to version 3.0.0 ([8784a47](https://github.com/knalli/homebridge-pilight/commit/8784a47))
@@ -24,8 +43,7 @@
 
 
 
-<a name="1.4.1"></a>
-## 1.4.1 (2017-08-17)
+## <small>1.4.1 (2017-08-17)</small>
 
 * Bump version ([a5a2732](https://github.com/knalli/homebridge-pilight/commit/a5a2732))
 * Release 1.4.1 ([97ae8a7](https://github.com/knalli/homebridge-pilight/commit/97ae8a7))
@@ -38,8 +56,7 @@
 
 
 
-<a name="1.4.0"></a>
-# 1.4.0 (2017-02-24)
+## 1.4.0 (2017-02-24)
 
 * Bump version ([00e2c33](https://github.com/knalli/homebridge-pilight/commit/00e2c33))
 * Bump version to release ([3b2988f](https://github.com/knalli/homebridge-pilight/commit/3b2988f))
@@ -54,8 +71,7 @@
 
 
 
-<a name="1.4.0-beta.1"></a>
-# 1.4.0-beta.1 (2017-02-16)
+## 1.4.0-beta.1 (2017-02-16)
 
 * chore(): add trace/debug logging ([8080263](https://github.com/knalli/homebridge-pilight/commit/8080263))
 * chore(): log plugin’s version ([4ecb88e](https://github.com/knalli/homebridge-pilight/commit/4ecb88e))
@@ -64,8 +80,7 @@
 
 
 
-<a name="1.4.0-beta.0"></a>
-# 1.4.0-beta.0 (2016-08-21)
+## 1.4.0-beta.0 (2016-08-21)
 
 * Added support for dimmers and light bulbs ([6dfa992](https://github.com/knalli/homebridge-pilight/commit/6dfa992))
 * beta 1.4.0-beta.0 ([399707d](https://github.com/knalli/homebridge-pilight/commit/399707d))
@@ -77,8 +92,7 @@
 
 
 
-<a name="1.3.0"></a>
-# 1.3.0 (2016-07-05)
+## 1.3.0 (2016-07-05)
 
 * Release 1.3.0 ([9c59c3b](https://github.com/knalli/homebridge-pilight/commit/9c59c3b))
 * Update eslint to version 2.5.1 ([2d48488](https://github.com/knalli/homebridge-pilight/commit/2d48488))
@@ -88,8 +102,7 @@
 
 
 
-<a name="1.2.0"></a>
-# 1.2.0 (2016-02-08)
+## 1.2.0 (2016-02-08)
 
 * Release 1.2.0 ([72ada28](https://github.com/knalli/homebridge-pilight/commit/72ada28))
 * feat(WebSocket): extract WebSocket handling into a seperated proxy ([04238a5](https://github.com/knalli/homebridge-pilight/commit/04238a5)), closes [#6](https://github.com/knalli/homebridge-pilight/issues/6) [#6](https://github.com/knalli/homebridge-pilight/issues/6)
@@ -97,8 +110,7 @@
 
 
 
-<a name="1.1.0"></a>
-# 1.1.0 (2016-02-08)
+## 1.1.0 (2016-02-08)
 
 * Provide a proper HoundCI config ([b99574e](https://github.com/knalli/homebridge-pilight/commit/b99574e))
 * Release 1.1.0 ([17b1973](https://github.com/knalli/homebridge-pilight/commit/17b1973))
@@ -111,16 +123,14 @@
 
 
 
-<a name="1.0.1"></a>
-## 1.0.1 (2015-11-20)
+## <small>1.0.1 (2015-11-20)</small>
 
 * Release 1.0.1 ([1b4c226](https://github.com/knalli/homebridge-pilight/commit/1b4c226))
 * fix(package): fix changelog generator settings ([e2b59fb](https://github.com/knalli/homebridge-pilight/commit/e2b59fb))
 
 
 
-<a name="1.0.0"></a>
-# 1.0.0 (2015-11-20)
+## 1.0.0 (2015-11-20)
 
 * Release 1.0.0 ([78e5b7d](https://github.com/knalli/homebridge-pilight/commit/78e5b7d))
 * feat(): first version ([155917a](https://github.com/knalli/homebridge-pilight/commit/155917a))
