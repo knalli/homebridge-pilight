@@ -6,13 +6,11 @@ This is an accessory plugin for [Homebridge](https://github.com/nfarina/homebrid
 pilight devices.
 
 ## What does this plugin do?
-
 This plugin only communications to the pilight daemon via the WebSocket API exposed by pilight itself. You should be sure
 to enable this api and the configured port is not blocked by any firewall.
 
 
 ## Install
-
 **Important: This plugin is using ES6/ES2015. Please use an appropriate environment like NodeJS v4 or higher.**
 
 If you have already installed homebridge globally, just install
@@ -24,7 +22,6 @@ Alternativly, add the dependency into your local project with
 ```npm install -S homebridge-pilight```
 
 ## Configuration
-
 The plugin registers itself as `pilight`. You have the following options:
 
 | Option   | Default   |
@@ -44,8 +41,6 @@ The Setting `type = "type"` can be "Switch", "TemperatureSensor", "HumiditySenso
 Additionally you have the Homebridge options `accessory` (for the actual plugin) and `name` (for representation later).
 
 ### Example config.json
-
-
 ```json
 {
   "bridge": {
@@ -70,5 +65,4 @@ Additionally you have the Homebridge options `accessory` (for the actual plugin)
 ```
 
 ## License
-
 Copyright 2017-2018 by Jan Philipp. Licensed under MIT.
